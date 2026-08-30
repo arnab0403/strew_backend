@@ -72,7 +72,7 @@ my-api/
 
 ### Prerequisites
 
-- Node.js (v18+)
+- Node.js (v24+)
 - MongoDB Atlas or local MongoDB instance
 
 ### Environment Setup
