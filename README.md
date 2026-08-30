@@ -117,3 +117,36 @@ npm test
 - **TV Shows**: `/api/tv` (`/action`, `/comedy`, `/crime`, `/drama`, `/mystery`, `/details`)
 - **Premium Videos**: `/api/premium` (`/video`, `/video/stream`, `/video/thumbnail`)
 - **Payment**: `/api/payment` (`/order`, `/update-premium-access`)
+
+## Docker & CI/CD Deployment to AWS EC2
+
+### Docker Local Usage
+
+To build and run the Docker image locally:
+
+```bash
+docker build -t strew-backend .
+docker run -p 8080:8080 --env-file .env strew-backend
+```
+
+### GitHub Actions CI/CD Setup
+
+The workflow in `.github/workflows/deploy.yml` automatically triggers on `push` to `main` / `master` branches:
+1. **Build & Test Check**: Installs dependencies and runs unit tests (`npm test`).
+2. **SCP Code Transfer**: Uses `appleboy/scp-action` to securely copy files to the AWS EC2 instance.
+3. **SSH Remote Build & Deploy**: Uses `appleboy/ssh-action` to generate `.env` from GitHub Secrets, build the Docker container image, and start the app container (`docker run -d --name strew-backend -p 8080:8080 ...`).
+
+#### Required GitHub Repository Secrets
+
+Configure the following secrets in your GitHub repository (**Settings > Secrets and variables > Actions**):
+
+- `EC2_HOST`: Public IP address or DNS of your AWS EC2 instance.
+- `EC2_USERNAME`: SSH username (e.g. `ubuntu` or `ec2-user`).
+- `EC2_SSH_KEY`: Private SSH Key (`.pem` contents) for EC2 access.
+- `DB_USER`, `DB_PASSWORD`, `DB_LINK`
+- `SECRECT_KEY`, `FRONT_END_URL`
+- `TMDB_API_KEY`
+- `RAZORPAY_PUBLIC_KEY`, `RAZORPAY_PRIVATE_KEY`
+- `GOOGLE_APP_USER`, `GOOGLE_APP_PASSWORD`
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALLBACK_URL`
+
