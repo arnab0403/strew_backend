@@ -8,6 +8,7 @@ const tvRouter = require("./routes/tv.routes");
 const movieRouter = require("./routes/movie.routes");
 const videoRouter = require("./routes/video.routes");
 const paymentRouter = require("./routes/payment.routes");
+const uploadRouter = require("./routes/upload.routes");
 const errorMiddleware = require("./middlewares/error.middleware");
 
 const app = express();
@@ -15,12 +16,12 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
+      "http://localhost:3001",
       "https://project-jio-clone-frontend.vercel.app",
-      "https://console.cron-job.org"
+      "https://console.cron-job.org",
     ],
-    credentials: true
-  })
+    credentials: true,
+  }),
 );
 
 app.use(cookieParser());
@@ -39,6 +40,7 @@ app.use("/api/tv", tvRouter);
 app.use("/api/movies", movieRouter);
 app.use("/api/premium", videoRouter);
 app.use("/api/payment", paymentRouter);
+app.use("/api/upload", uploadRouter);
 
 // Global Error Handler
 app.use(errorMiddleware);

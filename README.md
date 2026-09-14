@@ -117,6 +117,9 @@ npm test
 - **TV Shows**: `/api/tv` (`/action`, `/comedy`, `/crime`, `/drama`, `/mystery`, `/details`)
 - **Premium Videos**: `/api/premium` (`/video`, `/video/stream`, `/video/thumbnail`)
 - **Payment**: `/api/payment` (`/order`, `/update-premium-access`)
+- **Upload video**: `POST /api/upload/video` as `multipart/form-data` with one `video` field. Videos are limited to 50 MB and stored in S3.
+- **Create Strew**: `POST /api/upload/strew` with JSON fields `tittle`, `description`, `genre`, `tags`, `thumbnail`, and `s3_video_source`. The video endpoint's returned bucket/key should be stored as `s3://<bucket>/<key>` in `s3_video_source`.
+- **Get Strews**: `GET /api/upload/strews` returns all Strews, newest first.
 
 ## Docker & CI/CD Deployment to AWS EC2
 
