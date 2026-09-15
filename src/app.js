@@ -17,6 +17,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3001",
+      "http://localhost:3000",
       "https://project-jio-clone-frontend.vercel.app",
       "https://console.cron-job.org",
     ],

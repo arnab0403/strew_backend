@@ -1,9 +1,9 @@
-const TMDBService = require("../services/tmdb.service");
+const { ENDPOINTS, fetch: fetchTMDB } = require("../services/tmdb.service");
 const { sendSuccess, sendError } = require("../utils/response");
 
 async function getActionTvShows(req, res) {
   try {
-    const response = await TMDBService.fetch(TMDBService.ENDPOINTS.fetchActionTvShows);
+    const response = await fetchTMDB(ENDPOINTS.fetchActionTvShows);
     response.results.forEach((item) => {
       item.media_type = "tv";
     });
@@ -16,7 +16,7 @@ async function getActionTvShows(req, res) {
 
 async function getComedyTvShows(req, res) {
   try {
-    const response = await TMDBService.fetch(TMDBService.ENDPOINTS.fetchComedyTvShows);
+    const response = await fetchTMDB(ENDPOINTS.fetchComedyTvShows);
     response.results.forEach((item) => {
       item.media_type = "tv";
     });
@@ -28,7 +28,7 @@ async function getComedyTvShows(req, res) {
 
 async function getCrimeTvShows(req, res) {
   try {
-    const response = await TMDBService.fetch(TMDBService.ENDPOINTS.fetchCrimeTvShows);
+    const response = await fetchTMDB(ENDPOINTS.fetchCrimeTvShows);
     response.results.forEach((item) => {
       item.media_type = "tv";
     });
@@ -40,7 +40,7 @@ async function getCrimeTvShows(req, res) {
 
 async function getDramaTvShows(req, res) {
   try {
-    const response = await TMDBService.fetch(TMDBService.ENDPOINTS.fetchDramaTvShows);
+    const response = await fetchTMDB(ENDPOINTS.fetchDramaTvShows);
     response.results.forEach((item) => {
       item.media_type = "tv";
     });
@@ -52,7 +52,7 @@ async function getDramaTvShows(req, res) {
 
 async function getMysteryTvShows(req, res) {
   try {
-    const response = await TMDBService.fetch(TMDBService.ENDPOINTS.fetchMysteryTvShows);
+    const response = await fetchTMDB(ENDPOINTS.fetchMysteryTvShows);
     response.results.forEach((item) => {
       item.media_type = "tv";
     });
@@ -65,7 +65,7 @@ async function getMysteryTvShows(req, res) {
 async function getTvShowsDetails(req, res) {
   try {
     const { id } = req.query;
-    const response = await TMDBService.fetch(TMDBService.ENDPOINTS.fetchTvShowVideos(id));
+    const response = await fetchTMDB(ENDPOINTS.fetchTvShowVideos(id));
     response.results.forEach((item) => {
       item.media_type = "tv";
     });

@@ -52,8 +52,7 @@ async function sendOtpEmail(userMail, userName, otp) {
   console.log("Message sent:", info.messageId);
 }
 
-class AuthService {
-  static async signUp(userData) {
+async function signUp(userData) {
     const { email, password } = userData;
     const isExist = await UserModel.findOne({ email });
 
@@ -66,9 +65,9 @@ class AuthService {
 
     const user = await UserModel.create(userData);
     return user;
-  }
+}
 
-  static async login({ email, password }) {
+async function login({ email, password }) {
     const user = await UserModel.findOne({ email });
 
     if (user?.provider === "google") {
@@ -87,9 +86,9 @@ class AuthService {
 
     const token = await signToken({ id: user._id });
     return { token, user };
-  }
+}
 
-  static async forgotPassword(email) {
+async function forgotPassword(email) {
     const user = await UserModel.findOne({ email });
 
     if (!user) {
@@ -102,9 +101,9 @@ class AuthService {
 
     await sendOtpEmail(user.email, user.name, otp);
     return true;
-  }
+}
 
-  static async resetPassword({ email, otp, password }) {
+async function resetPassword({ email, otp, password }) {
     const user = await UserModel.findOne({ email });
 
     if (!user) {
@@ -121,7 +120,6 @@ class AuthService {
 
     await user.save();
     return true;
-  }
 }
 
-module.exports = AuthService;
+module.exports = { signUp, login, forgotPassword, resetPassword };

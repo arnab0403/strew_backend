@@ -3,8 +3,7 @@ const path = require("path");
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegInstaller = require("@ffmpeg-installer/ffmpeg");
 
-class VideoService {
-  static getAllPremiumVideos() {
+function getAllPremiumVideos() {
     return new Promise((resolve, reject) => {
       fs.readdir("./Premium", (err, files) => {
         if (err) return reject(err);
@@ -14,9 +13,9 @@ class VideoService {
         resolve(videos);
       });
     });
-  }
+}
 
-  static getVideosThumbnail(name, rootDir) {
+function getVideosThumbnail(name, rootDir) {
     const thumbnailName = name.split(".")[0] + ".jpg";
     const thumbnailPath = path.join(rootDir, "Thumbnails", thumbnailName);
 
@@ -37,9 +36,9 @@ class VideoService {
 
       return thumbnailPath;
     }
-  }
+}
 
-  static streamVideo(name, rangeHeader, req, res, rootDir) {
+function streamVideo(name, rangeHeader, req, res, rootDir) {
     const videoPath = path.join(rootDir, "Premium", name);
     const stat = fs.statSync(videoPath);
     const fileSize = stat.size;
@@ -59,7 +58,6 @@ class VideoService {
     res.writeHead(206, header);
     const videoStreamInstance = fs.createReadStream(videoPath, { start, end });
     videoStreamInstance.pipe(res);
-  }
 }
 
-module.exports = VideoService;
+module.exports = { getAllPremiumVideos, getVideosThumbnail, streamVideo };

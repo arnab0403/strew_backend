@@ -8,8 +8,7 @@ const instance = new Razorpay({
   key_secret: env.RAZORPAY_PRIVATE_KEY
 });
 
-class PaymentService {
-  static async createCheckout(amount) {
+async function createCheckout(amount) {
     const currency = "INR";
     const uid = new ShortId({ length: 10 });
     const orderConfig = {
@@ -20,9 +19,9 @@ class PaymentService {
 
     const order = await instance.orders.create(orderConfig);
     return order;
-  }
+}
 
-  static async updatePremiumDetails(email) {
+async function updatePremiumDetails(email) {
     const user = await UserModel.findOne({ email });
 
     if (!user) {
@@ -32,7 +31,6 @@ class PaymentService {
     user.isPremium = true;
     await user.save();
     return true;
-  }
 }
 
-module.exports = PaymentService;
+module.exports = { createCheckout, updatePremiumDetails };

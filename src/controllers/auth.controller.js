@@ -1,11 +1,11 @@
-const AuthService = require("../services/auth.service");
+const { signUp: signUpUser, login: loginUser, forgotPassword: sendPasswordOtp, resetPassword: resetUserPassword } = require("../services/auth.service");
 const { sendSuccess, sendError } = require("../utils/response");
 const { signToken } = require("../utils/jwt");
 const env = require("../config/env");
 
 const signUp = async (req, res, next) => {
   try {
-    const userRes = await AuthService.signUp(req.body);
+    const userRes = await signUpUser(req.body);
     return sendSuccess(res, 202, "User created sucsessfully", { user: userRes });
   } catch (error) {
     if (error.status) {
@@ -18,7 +18,7 @@ const signUp = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { token, user } = await AuthService.login(req.body);
+    const { token, user } = await loginUser(req.body);
 
     res.cookie("jwt", token, {
       maxAge: 1000 * 60 * 60 * 24,
@@ -55,7 +55,7 @@ const logout = (req, res) => {
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-    await AuthService.forgotPassword(email);
+    await sendPasswordOtp(email);
     return sendSuccess(res, 200, "OTP sent");
   } catch (error) {
     if (error.status) {
@@ -68,7 +68,7 @@ const forgotPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   try {
-    await AuthService.resetPassword(req.body);
+    await resetUserPassword(req.body);
     return sendSuccess(res, 200, "otp confirmed, user verified");
   } catch (error) {
     if (error.status) {

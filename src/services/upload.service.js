@@ -6,8 +6,7 @@ const StrewModel = require("../models/strew.model");
 
 const s3Client = new S3Client({ region: env.AWS_REGION });
 
-class UploadService {
-  static async uploadVideo(file) {
+async function uploadVideo(file) {
     if (!env.AWS_S3_BUCKET) {
       const error = new Error("AWS_S3_BUCKET is not configured");
       error.statusCode = 500;
@@ -32,9 +31,9 @@ class UploadService {
       contentType: file.mimetype,
       size: file.size,
     };
-  }
+}
 
-  static async createStrew(data) {
+async function createStrew(data) {
     return StrewModel.create({
       tittle: data.tittle,
       description: data.description,
@@ -43,11 +42,10 @@ class UploadService {
       thumbnail: parseStringArray(data.thumbnail),
       s3_video_source: data.s3_video_source,
     });
-  }
+}
 
-  static async getStrews() {
+async function getStrews() {
     return StrewModel.find().sort({ createdAt: -1 });
-  }
 }
 
 function parseStringArray(value) {
@@ -62,4 +60,4 @@ function parseStringArray(value) {
   }
 }
 
-module.exports = UploadService;
+module.exports = { uploadVideo, createStrew, getStrews };

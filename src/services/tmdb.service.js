@@ -54,10 +54,7 @@ const setCache = (key, data) => {
 const getCache = (key) => cache[key];
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-class TMDBService {
-  static ENDPOINTS = TMDB_ENDPOINT;
-
-  static async fetch(endpoint) {
+async function fetchTMDB(endpoint) {
     const cacheKey = `tmdb_${endpoint}`;
     const cachedData = getCache(cacheKey);
 
@@ -94,7 +91,6 @@ class TMDBService {
 
     console.error(`All 3 attempts failed for ${endpoint}`);
     throw lastError;
-  }
 }
 
-module.exports = TMDBService;
+module.exports = { ENDPOINTS: TMDB_ENDPOINT, fetch: fetchTMDB };

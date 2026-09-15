@@ -1,17 +1,16 @@
 const UserModel = require("../models/user.model");
-const TMDBService = require("./tmdb.service");
+const { ENDPOINTS, fetch: fetchTMDB } = require("./tmdb.service");
 
-class UserService {
-  static async getUserProfile(userId) {
+async function getUserProfile(userId) {
     const user = await UserModel.findById(userId);
     if (!user) {
       throw { status: 404, message: "User not found" };
     }
     const { name, email, wishList, isPremium, avatar } = user;
     return { name, email, avatar, wishList, isPremium };
-  }
+}
 
-  static async addToWishList(userId, { id, media_type }) {
+async function addToWishList(userId, { id, media_type }) {
     const user = await UserModel.findById(userId);
 
     if (!user) {
@@ -24,9 +23,9 @@ class UserService {
 
     let postItem;
     if (media_type === "tv") {
-      postItem = await TMDBService.fetch(TMDBService.ENDPOINTS.fetchTvShowDetails(id));
+      postItem = await fetchTMDB(ENDPOINTS.fetchTvShowDetails(id));
     } else {
-      postItem = await TMDBService.fetch(TMDBService.ENDPOINTS.fetchMovieDetails(id));
+      postItem = await fetchTMDB(ENDPOINTS.fetchMovieDetails(id));
     }
 
     const wishListItem = {
@@ -39,15 +38,14 @@ class UserService {
     user.wishList.push(wishListItem);
     await user.save();
     return wishListItem;
-  }
+}
 
-  static async getUserWishList(userId) {
+async function getUserWishList(userId) {
     const user = await UserModel.findById(userId);
     if (!user) {
       throw { status: 404, message: "User not found" };
     }
     return user.wishList || [];
-  }
 }
 
-module.exports = UserService;
+module.exports = { getUserProfile, addToWishList, getUserWishList };

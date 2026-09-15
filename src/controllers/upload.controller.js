@@ -1,4 +1,4 @@
-const UploadService = require("../services/upload.service");
+const { uploadVideo: saveVideo, createStrew: saveStrew, getStrews: fetchStrews } = require("../services/upload.service");
 const { sendError, sendSuccess } = require("../utils/response");
 
 async function uploadVideo(req, res, next) {
@@ -7,7 +7,7 @@ async function uploadVideo(req, res, next) {
       return sendError(res, 400, "A video file is required in the 'video' field");
     }
 
-    const upload = await UploadService.uploadVideo(req.file);
+    const upload = await saveVideo(req.file);
     return sendSuccess(res, 201, "Video uploaded successfully", { upload });
   } catch (error) {
     return next(error);
@@ -16,7 +16,7 @@ async function uploadVideo(req, res, next) {
 
 async function createStrew(req, res, next) {
   try {
-    const strew = await UploadService.createStrew(req.body);
+    const strew = await saveStrew(req.body);
     return sendSuccess(res, 201, "Strew created successfully", { strew });
   } catch (error) {
     return next(error);
@@ -25,7 +25,7 @@ async function createStrew(req, res, next) {
 
 async function getStrews(req, res, next) {
   try {
-    const strews = await UploadService.getStrews();
+    const strews = await fetchStrews();
     return sendSuccess(res, 200, "Strews fetched successfully", { strews });
   } catch (error) {
     return next(error);
